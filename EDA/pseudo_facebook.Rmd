@@ -1,0 +1,72 @@
+---
+title: "pseudo_facebook"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+#summary(cars)
+library(ggplot2)
+pf <- read.csv('pseudo_facebook.tsv', sep = '\t')
+summary(pf)
+names(pf)
+#qplot(data = pf, x = dob_day) + 
+#  scale_x_discrete(breaks = 1:31) + 
+#  facet_wrap(~ dob_month, ncol = 3) + 
+#  geom_histogram()
+
+
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+#plot(cars)
+qplot(data = subset(pf, !is.na(gender)), x = friend_count, binwidth=10) + 
+    scale_x_continuous(limits=c(0,1000), breaks  = seq(0,1000,50)) +
+    facet_wrap(~ gender)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+table(pf$gender)
+by(pf$friend_count, pf$gender, summary)
+
+
+qplot(x=tenure/365, data=pf, binwidth=1, colour= I('black'), fill = I('#099DD9'))
+
+qplot(x=age, data=pf, bindwidth=1, xlab ='age2', ylab='count 2', color=I('black'), fill = I('#5760AB')) +
+    scale_x_discrete(breaks=seq(0,113,5))
+
+
+ggplot(aes(x = age), data = pf) +
+    geom_histogram(binwidth = 1, fill = '#5760AB') +
+    scale_x_discrete(breaks = seq(0, 113, 5))
+
+library(ggplot2)
+data(diamonds)
+
+names(diamonds)
+summary(diamonds$price)
+ggplot(aes(x=price), data=diamonds) +
+    geom_histogram(binwidth = 1, fill = '#5760AB') +
+    scale_x_continuous(limits=c(326,950))
+
+
+qplot(x=price,
+      data=diamonds,
+      xlab = 'Price of Diamond',
+      ylab = 'Total No of Diamonds',
+      color= I('black'),
+      fill=I('#FF9900'),
+      binwidth=1000,
+      )+
+    facet_wrap(~cut,ncol=2)
+
+qplot(x = price, data = diamonds, xlim = c(250,10000), binwidth = 100) + facet_wrap(~cut)
+```
+
